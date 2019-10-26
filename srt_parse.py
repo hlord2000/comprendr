@@ -24,6 +24,7 @@ for x in subtitles:
 
 
 def srt_parse(file_name):
+    # Ensure that an absolute path is used on the input.
     # Checks if file_name is a string.
     if isinstance(file_name, str):
         # Holds file_name open to prevent overuse of memory.
