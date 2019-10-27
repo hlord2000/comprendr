@@ -1,4 +1,4 @@
-![Compress-Hension](https://i.imgur.com/9I5m7rs.gif | width=25)
+<img src="https://i.imgur.com/9I5m7rs.gif" alt="Compress-Hension" width="200">
 # Compress-Hension
 This website allows for YouTube video URL input and minimizes user time by dynamically customizing the video playback speed. The video is optimized using Google’s Natural Language API and output in a fast, agile framework of web-development.
 
