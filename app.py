@@ -45,7 +45,7 @@ def return_timestamps(video_url):
         content += line["text"] + " "
 
     # Must add path to credentials file for Google NLP API
-    path_to_credentials = r"C:\Users\Helmut Lord\Documents\GitHub\compress-hension\Compress-hension-be2458f566ae.json"
+    path_to_credentials = r"C:\Users\Helmut Lord\Documents\GitHub\compress-hension\Compress-hension-8324b47d3fbf.json"
     credentials = service_account.Credentials.from_service_account_file(path_to_credentials)
 
     # Instantiates a client
@@ -100,12 +100,13 @@ def return_timestamps(video_url):
             speed_list.append((speed//.1)/10)
         else:
             speed_list.append(3.0)
-    if len(speed_list)%2:
+    poly_order = 30
+    if len(speed_list) % 2:
         window_len = len(speed_list)
     else:
         window_len = len(speed_list)-1
 
-    temp_speed_list = scipy.signal.savgol_filter(speed_list, window_len, 30)
+    temp_speed_list = scipy.signal.savgol_filter(speed_list, window_len, poly_order)
     speed_list = temp_speed_list.tolist()
     speed_list = [round(x, 1) if x >= 1 else 1 for x in speed_list]
 

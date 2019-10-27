@@ -12,3 +12,19 @@
     width: 100%;
     height: 100%;
 }
+
+ input, textarea {
+	font-family: 'Press Start 2P', sans-serif;
+	background-color: #018aa2;
+	outline:none;
+	border:0;
+	box-shadow:0;
+	padding-left:10px;
+}
+::placeholder {
+	color: #ddd;
+}
+
+.loveudavid {
+  font-size: 8pt;
+}

@@ -1,61 +1,82 @@
 <!DOCTYPE html>
-<html style="background-color: #01badb">
+<html style="background-color: #01badb; font-family: 'Press Start 2P', sans-serif;">
 	<head>
 		<title>Compress-Hension</title>
-		<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
-		<link rel="stylesheet" href="/static/main.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="../static/main.css">
 	</head>
-	<body>
-		<div id="player"></div>
+	<body style="background-color: #01badb;>
+		<div class="container">
+			<div class="row justify-content-center align-items-start mt-5 mb-3">
+		        <div class="col-md-8 text-right pt-5">
+		        	<h1 style="font-family: 'Press Start 2P', sans-serif; color:#fff">Compress-Hension</h1>
+		        </div>
+		        <div class="col-md-4 text-left pt-5">
+		        	<img style="height:48pt;" src="../static/logo.gif">
+		        </div>
+		    </div>
+			<div class="row justify-content-center align-items-center">
+				<div class="col-xs-12">
+					<div id="player"></div>
+				    <script>
+				      // 2. This code loads the IFrame Player API code asynchronously.
+				      var tag = document.createElement('script');
 
-	    <script>
-	      // 2. This code loads the IFrame Player API code asynchronously.
-	      var tag = document.createElement('script');
+				      tag.src = "https://www.youtube.com/iframe_api";
+				      var firstScriptTag = document.getElementsByTagName('script')[0];
+				      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-	      tag.src = "https://www.youtube.com/iframe_api";
-	      var firstScriptTag = document.getElementsByTagName('script')[0];
-	      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-	      // 3. This function creates an <iframe> (and YouTube player)
-	      //    after the API code downloads.
-	      var player;
-	      function onYouTubeIframeAPIReady() {
-	        player = new YT.Player('player', {
-	          height: '390',
-	          width: '640',
-	          videoId: '{{ video_id }}',
-	          events: {
-	          	'onReady': onPlayerReady,
-	          	'onStateChange': onChange
-	        	}
-	        });
-	      }
-    		var timestamps = JSON.parse({{ speeds|tojson }});
-    		//document.querySelector('video').playbackRate = 3.0;
-    		i = 0;
-    		console.log("Changed fucking something :)");
-    		function onPlayerReady(event) {
-	    		
-			}
-			function onChange(event) {
-				setInterval(function(){ 
-					if (player.getPlayerState() == 1) {
-						//This hurts my brain.
-		    			if (player.getCurrentTime() >= timestamps[i][0]){
-							player.setPlaybackRate(timestamps[i][1]);
-							i++;
+				      // 3. This function creates an <iframe> (and YouTube player)
+				      //    after the API code downloads.
+				      var height_view = document.documentElement.clientHeight;
+					  var width_view = document.documentElement.clientWidth;
+					  width_view = width_view - 20;
+				      var player;
+				      function onYouTubeIframeAPIReady() {
+				        player = new YT.Player('player', {
+				          height: 450,
+				          width: 800,
+				          videoId: '{{ video_id }}',
+				          events: {
+				          	'onReady': onPlayerReady,
+				          	'onStateChange': onChange
+				        	}
+				        });
+				      }
+			    		var timestamps = JSON.parse({{ speeds|tojson }});
+			    		//document.querySelector('video').playbackRate = 3.0;
+			    		i = 0;
+			    		function onPlayerReady(event) {
+				    		
 						}
-						//This hurts my brain significantly more.  
-						else if (player.getCurrentTime() <= timestamps[i-1][0]){
-							i--;
+						function onChange(event) {
+							setInterval(function(){ 
+								if (player.getPlayerState() == 1) {
+									//This hurts my brain.
+					    			if (player.getCurrentTime() >= timestamps[i][0]){
+										player.setPlaybackRate(timestamps[i][1]);
+										i++;
+									}
+									//This hurts my brain significantly more.  
+									else if (player.getCurrentTime() <= timestamps[i-1][0]){
+										i--;
+									}
+								}
+							}, 10);
 						}
-					}
-				}, 10);
-			}
-		</script>
+					</script>
+				</div>
+			</div>
+			<div class="navbar fixed-bottom row justify-content-center align-items-start">
+		        <div class="col-xs-12 text-center">
+		        	<p class = "loveudavid" style="color:#fff; font-family: 'Press Start 2P', sans-serif;">Baked with love by: Helmut Lord, David Gordon, Taleb Hirani, and Melissa Hernandez</p>
+					<p class = "loveudavid" style="color:#fff; font-family: 'Press Start 2P', sans-serif;">Using Google NLP, Python, Bootstrap, Flask, and a 55 gallon drum of elbow grease.</p>
+		        </div>
+		    </div>
+		</div>
 	</body>
-	<footer>
-		<p>Baked with love by: Helmut Lord, David Gordon, Taleb Hirani, and Melissa Hernandez</p>
-		<p>Using Tachyons, Flask, and a 55-gallon drum of elbow grease</p>
-	</footer>
 </html>
