@@ -45,7 +45,7 @@ def return_timestamps(video_url):
         content += line["text"] + " "
 
     # Must add path to credentials file for Google NLP API
-    path_to_credentials = r"C:\Users\Helmut Lord\Documents\GitHub\compress-hension\Compress-hension-8324b47d3fbf.json"
+    path_to_credentials = r"C:\Users\Helmut Lord\Documents\GitHub\compress-hension\Compress-hension-1927fea3922e.json"
     credentials = service_account.Credentials.from_service_account_file(path_to_credentials)
 
     # Instantiates a client
