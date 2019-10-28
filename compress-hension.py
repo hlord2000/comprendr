@@ -14,6 +14,8 @@ def my_form_post():
     text = request.form['text']
     timestamps = return_timestamps(text)
     print(timestamps)
+    # TODO implement graph display on site
+    # TODO implement control ranges for speed, per user input
     return render_template('results.html', video_id=link_parse(text), speeds=timestamps)
 
 

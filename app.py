@@ -1,5 +1,3 @@
-from flask import Flask, request, render_template
-import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal
 from google.cloud import language
@@ -10,15 +8,16 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from link_parse import link_parse
 import json
 
-def running_sum(a):
-  tot = 0
-  for item in a:
-    tot += item
-    yield tot
 
+def running_sum(given_list):
+    total = 0
+    for item in given_list:
+        total += item
+        yield total
 
-
+# TODO make this function call/class cleaner...  Maybe use a class?  Idk how those work.
 def return_timestamps(video_url):
+
     def get_entity_sub(index):
         i = 0
         for b in total_indices:
@@ -29,9 +28,11 @@ def return_timestamps(video_url):
     # Passes full video URL to link_parse to get video ID
     video_id = link_parse(video_url)
     print(video_id)
+
+    # TODO implement other possible languages, or provide a list of languages available on webapp.
     try:
         subtitles = YouTubeTranscriptApi.get_transcript(video_id, languages=["en"])
-    except:
+    except AttributeError:
         raise Exception("Video was unable to be found.  Please enter a full YouTube URL.")
 
     # Gives lengths of each line in subtitles.
@@ -61,6 +62,7 @@ def return_timestamps(video_url):
     response = client.analyze_entities(document, encoding_type=encoding_type).entities
 
     # This gives a tuple for each entity including its offset from the beginning of the string and its salience score
+    # TODO find silent parts of video (times between subtitle times) and play them faster.
     salience_scores = []
     for entity in response:
         # For each entity (noun) in response, it...
@@ -69,11 +71,14 @@ def return_timestamps(video_url):
             index_and_salience = tuple([entity.salience, word.text.begin_offset])
             salience_scores.append(index_and_salience)
 
-    # Sorts the scores by the 2nd object in each tuple.
+    # Sorts the scores by the 2nd object in each tuple--puts them in order, basically.
     sorted_scores = sorted(salience_scores, key=lambda tup: tup[1])
 
+    # TODO find end time of each line and compare to next start time to find lengths of silent periods to accelerate.
     # Gives start times of each line in subtitles file.
     start_times = [0]+[x["start"] for x in subtitles]
+
+    # TODO FIX DAVID'S LACK OF COMMENTS
     time_salience = {}
     for score in sorted_scores:
         cur_sub_start = start_times[get_entity_sub(score[1])]
@@ -85,16 +90,14 @@ def return_timestamps(video_url):
         time_salience[key] = sum(time_salience[key])
     time_stamps = [x for x in time_salience.keys()]
     salience_list = [x for x in time_salience.values()]
-    #plt.plot(time_stamps, salience_list)
-    #plt.show()
-    n = 21
-    avg_sal = np.convolve(salience_list, [1/n for x in range(n)])
+    num_avg_points = 11
+    avg_sal = np.convolve(salience_list, [1/num_avg_points for i in range(num_avg_points)])
     avg_sal = avg_sal.tolist()
 
     max_time_sal = max(salience_list)
-    m = 2
     speed_list = []
-    for point in avg_sal[10:-10]:
+
+    for point in avg_sal[5:-5]:
         speed = 16**(-8*(point/max_time_sal))+1
         if speed <= 3.0:
             speed_list.append((speed//.1)/10)
@@ -120,11 +123,8 @@ def return_timestamps(video_url):
         del speed_list[(len(time_stamps)-1)//2]
         del time_stamps[(len(time_stamps)-1)//2]
 
-    #plt.plot(time_stamps, speed_list)
-    #plt.show()
     for i in range(1):
         del speed_list[(len(time_stamps)-1)//2]
         del time_stamps[(len(time_stamps)-1)//2]
 
     return json.dumps(list(final_dict.items()))
-#print(return_timestamps("https://www.youtube.com/watch?v=cIRDvscVPr0"))
